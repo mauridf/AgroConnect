@@ -33,6 +33,9 @@ namespace AgroConnect.API.Extensions
             CreateMap<Cultura, CulturaDto>();
             CreateMap<CreateCulturaDto, Cultura>();
             CreateMap<UpdateCulturaDto, Cultura>();
+            CreateMap<Cultura, CulturaSummaryDto>()
+                .ForMember(dest => dest.AreaUtilizadaHectares,
+                           opt => opt.MapFrom(src => src.FazendaCulturas.Sum(fc => fc.AreaUtilizadaHectares)));
 
             // FazendaCultura
             CreateMap<FazendaCultura, FazendaCulturaDto>();

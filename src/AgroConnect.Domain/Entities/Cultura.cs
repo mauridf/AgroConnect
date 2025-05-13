@@ -29,6 +29,22 @@ namespace AgroConnect.Domain.Entities
         // Navigation property
         public ICollection<FazendaCultura> FazendaCulturas { get; set; }
 
+        public void Atualizar(
+        string nome,
+        CategoriaCultura categoria,
+        string tempoColheita,
+        ExigenciaClimatica exigenciaClimatica,
+        string detalhes)
+        {
+            Nome = nome;
+            Categoria = categoria;
+            TempoColheita = tempoColheita;
+            ExigenciaClimatica = exigenciaClimatica;
+            Detalhes = detalhes;
+            UpdateTimestamp();
+            Validate();
+        }
+
         private void Validate()
         {
             if (string.IsNullOrWhiteSpace(Nome))
