@@ -1,5 +1,12 @@
-﻿using AgroConnect.Infrastructure;
+﻿using System.Text;
+using AgroConnect.Infrastructure;
+using AgroConnect.Infrastructure.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Reflection;
 
 namespace AgroConnect.API.Extensions
 {
@@ -8,7 +15,11 @@ namespace AgroConnect.API.Extensions
         public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
         {
             // Configurações básicas
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
 
             // Swagger/OpenAPI
             builder.Services.AddEndpointsApiExplorer();
@@ -56,22 +67,104 @@ namespace AgroConnect.API.Extensions
             // Outros serviços da aplicação
             builder.Services.AddApplicationServices();
 
+            // Configuração de CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
+            // Configuração do JWT
+            builder.ConfigureJwt();
+
+            builder.Services.AddHealthChecks()
+                .AddDbContextCheck<AgroConnectDbContext>();
+
             return builder;
+        }
+
+        // Configuração do JWT
+        public static void ConfigureJwt(this WebApplicationBuilder builder)
+        {
+            var jwtSettings = builder.Configuration.GetSection("Jwt");
+            var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
+
+            builder.Services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = jwtSettings["Issuer"],
+                    ValidAudience = jwtSettings["Audience"],
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
         }
 
         public static WebApplication ConfigurePipeline(this WebApplication app)
         {
-            // Configure the HTTP request pipeline.
+            app.UseDeveloperExceptionPage();
+
+            // Middleware de erro personalizado
+            app.Use(async (context, next) =>
+            {
+                try
+                {
+                    await next();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"ERROR: {ex}");
+                    throw;
+                }
+            });
+
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.MapGet("/", () => Results.Redirect("/swagger"));
+
+                using (var scope = app.Services.CreateScope())
+                {
+                    var dbContext = scope.ServiceProvider
+                        .GetRequiredService<AgroConnectDbContext>();
+                    dbContext.Database.Migrate();
+                }
             }
 
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AgroConnect API v1");
+                c.RoutePrefix = "swagger";
+                c.ConfigObject.DisplayRequestDuration = true;
+            });
+
             app.UseHttpsRedirection();
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
+
             app.MapControllers();
+            app.MapHealthChecks("/health");
+
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/error");
+            }
 
             return app;
         }
