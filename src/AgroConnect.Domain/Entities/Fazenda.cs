@@ -4,6 +4,7 @@ namespace AgroConnect.Domain.Entities
 {
     public class Fazenda : EntityBase
     {
+        protected Fazenda() { }
         public Guid ProdutorId { get; set; }
         public string Nome { get; set; }
         public string? CNPJ { get; set; }

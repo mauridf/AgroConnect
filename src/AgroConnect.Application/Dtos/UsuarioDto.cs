@@ -7,6 +7,8 @@ namespace AgroConnect.Application.Dtos
         public Guid Id { get; set; }
         public string NomeUsuario { get; set; }
         public TipoUsuario TipoUsuario { get; set; }
+        public string Email { get; set; }
+        public bool EmailConfirmado { get; set; }
         public DateTime DataCriacao { get; set; }
         public DateTime? DataAtualizacao { get; set; }
     }
@@ -21,6 +23,8 @@ namespace AgroConnect.Application.Dtos
     {
         public string NomeUsuario { get; set; }
         public string Senha { get; set; }
+        public string Email { get; set; }
+        public bool EmailConfirmado { get; set; }
         public TipoUsuario TipoUsuario { get; set; }
     }
 
@@ -29,5 +33,14 @@ namespace AgroConnect.Application.Dtos
         public UsuarioDto Usuario { get; set; }
         public string Token { get; set; }
         public DateTime DataExpiracao { get; set; }
+    }
+
+    public class UsuarioUpdateDto
+    {
+        public string NomeUsuario { get; set; }
+        public TipoUsuario TipoUsuario { get; set; }
+        public string? NovaSenha { get; set; }
+        public string Email { get; set; }
+        public bool EmailConfirmado { get; set; }
     }
 }

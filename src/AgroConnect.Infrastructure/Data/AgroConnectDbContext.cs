@@ -14,6 +14,7 @@ namespace AgroConnect.Infrastructure.Data
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<ProdutorRural> ProdutoresRurais { get; set; }
         public DbSet<Fazenda> Fazendas { get; set; }
         public DbSet<Cultura> Culturas { get; set; }

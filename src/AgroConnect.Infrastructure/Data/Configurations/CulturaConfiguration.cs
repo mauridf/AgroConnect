@@ -1,5 +1,4 @@
 ﻿using AgroConnect.Domain.Entities;
-using AgroConnect.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,6 +15,9 @@ namespace AgroConnect.Infrastructure.Data.Configurations
             builder.Property(c => c.Nome)
                 .IsRequired()
                 .HasMaxLength(100);
+
+            builder.HasIndex(c => c.Nome)
+                .IsUnique();
 
             builder.Property(c => c.Categoria)
                 .IsRequired()
