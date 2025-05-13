@@ -7,7 +7,7 @@ using static AgroConnect.Domain.Entities.EntityBase;
 namespace AgroConnect.API.Controllers
 {
     [Authorize]
-    [Route("api/usuarios")]
+    [Route("api/usuario")]
     [ApiController]
     public class UsuariosController : ControllerBase
     {

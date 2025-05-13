@@ -17,6 +17,9 @@ namespace AgroConnect.API.Extensions
             CreateMap<ProdutorRural, ProdutorRuralDto>();
             CreateMap<CreateProdutorRuralDto, ProdutorRural>();
             CreateMap<UpdateProdutorRuralDto, ProdutorRural>();
+            CreateMap<ProdutorRural, ProdutorRuralSummaryDto>()
+                .ForMember(dest => dest.UF, opt => opt.MapFrom(src => src.Endereco.UF))
+                .ForMember(dest => dest.TotalFazendas, opt => opt.MapFrom(src => src.Fazendas.Count));
 
             // Fazenda
             CreateMap<Fazenda, FazendaDto>();
