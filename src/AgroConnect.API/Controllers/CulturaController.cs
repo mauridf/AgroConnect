@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AgroConnect.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/cultura")]
     public class CulturaController : ControllerBase
     {
         private readonly ICulturaService _service;
