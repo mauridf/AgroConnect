@@ -34,10 +34,10 @@ namespace AgroConnect.Domain.Entities
 
         private void Validate()
         {
-            if (AreaUtilizadaHectares >= 0)
+            if (AreaUtilizadaHectares <= 0)
                 throw new DomainException("A Área Utilizada não pode ser menor ou igual a Zero(0)");
 
-            if (AreaUtilizadaHectares > Fazenda.AreaAgricultavelHectares)
+            if (Fazenda != null && AreaUtilizadaHectares > Fazenda.AreaAgricultavelHectares)
                 throw new DomainException("A Área Utilizada não pode ser maior do que a Área Agricultável");
         }
     }
