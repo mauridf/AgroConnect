@@ -17,7 +17,7 @@ namespace AgroConnect.API.Extensions
             services.AddScoped<IFazendaService, FazendaService>();
             services.AddScoped<ICulturaService, CulturaService>();
             services.AddScoped<IFazendaCulturaService, FazendaCulturaService>();
-            //services.AddScoped<IDashboardService, DashboardService>();
+            services.AddScoped<IDashboardService, DashboardService>();
 
             // Repositórios
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
@@ -26,6 +26,7 @@ namespace AgroConnect.API.Extensions
             services.AddScoped<IFazendaRepository, FazendaRepository>();
             services.AddScoped<ICulturaRepository, CulturaRepository>();
             services.AddScoped<IFazendaCulturaRepository, FazendaCulturaRepository>();
+            services.AddScoped<IDashboardRepository, DashboardRepository>();
 
             // Serviços de infraestrutura
             services.AddScoped<IPasswordHasher, PasswordHasher>();

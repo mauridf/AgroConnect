@@ -41,6 +41,12 @@ namespace AgroConnect.API.Extensions
             CreateMap<FazendaCultura, FazendaCulturaDto>();
             CreateMap<CreateFazendaCulturaDto, FazendaCultura>();
             CreateMap<UpdateFazendaCulturaDto, FazendaCultura>();
+
+            // DashBoard
+            CreateMap<UfSummaryDto, UfSummaryDto>();
+            CreateMap<CulturaSummaryDashboardDto, CulturaSummaryDashboardDto>();
+            CreateMap<CategoriaSummaryDashboardDto, CategoriaSummaryDashboardDto>();
+            CreateMap<DashboardSummaryDto, DashboardSummaryDto>();
         }
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AgroConnect.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/fazendacultura")]
     public class FazendaCulturaController : ControllerBase
     {
         private readonly IFazendaCulturaService _service;
