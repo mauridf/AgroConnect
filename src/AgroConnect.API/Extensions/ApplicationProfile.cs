@@ -22,9 +22,12 @@ namespace AgroConnect.API.Extensions
                 .ForMember(dest => dest.TotalFazendas, opt => opt.MapFrom(src => src.Fazendas.Count));
 
             // Fazenda
-            CreateMap<Fazenda, FazendaDto>();
+            CreateMap<Fazenda, FazendaDto>()
+            .ForMember(dest => dest.Culturas, opt => opt.MapFrom(src => src.FazendaCulturas.Select(fc => fc.Cultura)));
             CreateMap<CreateFazendaDto, Fazenda>();
             CreateMap<UpdateFazendaDto, Fazenda>();
+            CreateMap<Fazenda, FazendaSummaryDto>()
+                .ForMember(dest => dest.UF, opt => opt.MapFrom(src => src.Endereco.UF));
 
             // Cultura
             CreateMap<Cultura, CulturaDto>();

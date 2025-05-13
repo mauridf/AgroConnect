@@ -24,6 +24,7 @@ namespace AgroConnect.Application.Dtos
         public string Nome { get; set; }
         public string CNPJ { get; set; }
         public Endereco Endereco { get; set; }
+        public bool UsarEnderecoProdutor { get; set; }
         public decimal AreaTotalHectares { get; set; }
         public decimal AreaAgricultavelHectares { get; set; }
         public decimal AreaVegetacaoHectares { get; set; }
@@ -37,6 +38,7 @@ namespace AgroConnect.Application.Dtos
         public string Nome { get; set; }
         public string CNPJ { get; set; }
         public Endereco Endereco { get; set; }
+        public bool UsarEnderecoProdutor { get; set; }
         public decimal AreaTotalHectares { get; set; }
         public decimal AreaAgricultavelHectares { get; set; }
         public decimal AreaVegetacaoHectares { get; set; }
