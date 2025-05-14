@@ -2,11 +2,11 @@
 {
     public enum CategoriaCultura
     {
-        Graos = 1,
-        Fibras = 2,
-        Horticultura = 3,
-        Fruticultura = 4,
-        Olericultura = 5,
-        Outros = 6
+        GraosCereais = 1,
+        Cafe = 2,
+        Frutas = 3,
+        Hortalicas = 4,
+        Florestal = 5,
+        CanaisEnergeticas = 6
     }
 }
