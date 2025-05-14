@@ -21,6 +21,8 @@ namespace AgroConnect.Domain.Entities
             TipoUsuario = tipoUsuario;
             Email = email;
             EmailConfirmado = emailConfirmado;
+            PasswordResetToken = string.Empty;
+            EmailConfirmationToken = string.Empty;
 
             Validate();
         }

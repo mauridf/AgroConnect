@@ -2,6 +2,7 @@
 using AgroConnect.Application.Interfaces;
 using AgroConnect.Domain.Entities;
 using AutoMapper;
+using BCrypt.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -66,11 +67,11 @@ namespace AgroConnect.Application.Services
                 throw new DomainException("Nome de usuário já está em uso");
 
             var usuario = new Usuario(
-                usuarioRegister.NomeUsuario,
-                CreatePasswordHash(usuarioRegister.Senha),
-                usuarioRegister.TipoUsuario,
-                email: usuarioRegister.Email, // Adicione esta linha se o email for opcional
-                emailConfirmado: false);
+            usuarioRegister.NomeUsuario,
+            CreatePasswordHash(usuarioRegister.Senha),
+            usuarioRegister.TipoUsuario,
+            email: usuarioRegister.Email,
+            emailConfirmado: false);
 
             await _usuarioRepository.AddAsync(usuario);
 
@@ -119,31 +120,19 @@ namespace AgroConnect.Application.Services
 
         public string CreatePasswordHash(string password)
         {
-            using var hmac = new HMACSHA512();
-            var passwordSalt = hmac.Key;
-            var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-            // Combine salt and hash for storage
-            var combinedHash = new byte[passwordSalt.Length + passwordHash.Length];
-            Buffer.BlockCopy(passwordSalt, 0, combinedHash, 0, passwordSalt.Length);
-            Buffer.BlockCopy(passwordHash, 0, combinedHash, passwordSalt.Length, passwordHash.Length);
-
-            return Convert.ToBase64String(combinedHash);
+            return BCrypt.Net.BCrypt.EnhancedHashPassword(password, HashType.SHA512);
         }
 
         private bool VerifyPasswordHash(string password, string storedHash)
         {
-            var combinedHash = Convert.FromBase64String(storedHash);
-            var salt = new byte[64];
-            var hash = new byte[64];
-
-            Buffer.BlockCopy(combinedHash, 0, salt, 0, salt.Length);
-            Buffer.BlockCopy(combinedHash, salt.Length, hash, 0, hash.Length);
-
-            using var hmac = new HMACSHA512(salt);
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-            return computedHash.SequenceEqual(hash);
+            try
+            {
+                return BCrypt.Net.BCrypt.EnhancedVerify(password, storedHash, HashType.SHA512);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private string GenerateRefreshToken()

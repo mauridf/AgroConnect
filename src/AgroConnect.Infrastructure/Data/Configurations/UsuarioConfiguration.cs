@@ -22,7 +22,7 @@ namespace AgroConnect.Infrastructure.Data.Configurations
 
             builder.Property(u => u.SenhaHash)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(256);
 
             builder.Property(u => u.TipoUsuario)
                 .IsRequired()

@@ -3,6 +3,7 @@ using System;
 using AgroConnect.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AgroConnect.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AgroConnectDbContext))]
-    partial class AgroConnectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250514001816_AlterSenhaHashLength")]
+    partial class AlterSenhaHashLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -261,8 +264,8 @@ namespace AgroConnect.Infrastructure.Data.Migrations
 
                     b.Property<string>("SenhaHash")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasMaxLength(550)
+                        .HasColumnType("character varying(550)");
 
                     b.Property<string>("TipoUsuario")
                         .IsRequired()
